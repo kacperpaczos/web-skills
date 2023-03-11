@@ -1,0 +1,85 @@
+div {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+#tools {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+#tools button {
+  margin-top: 5px;
+}
+
+#travels {
+  display: flex;
+
+  min-height: 30vh;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.odd{
+  background-color: #e0e0d1;
+}
+#travels div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.flex-basis {
+  flex-basis: 100%;
+}
+
+#travels p,
+h4 {
+  line-height: 40px;
+}
+#travels button {
+  margin-top: 5px;
+}
+
+#map-box {
+  height: 60vh;
+  margin-top: 0px;
+}
+
+#travels div div {
+  display: flex;
+  flex-direction: row;
+}
+
+#travels div div img {
+  width: 100px;
+  height: 100px;
+}
+
+#menu {
+  position: absolute;
+  top: 5px;
+  height: 20px;
+  background-color: #303645;
+  color: #f9fbfa;
+  width: 320px;
+
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 2px;
+
+  margin: 0 !important;
+}
+
+@media only screen and (max-width: 600px) {
+  #menu {
+    top: 15px;
+  }
+}
+
+#menu input{
+  margin-top: 0px;
+}

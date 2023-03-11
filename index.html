@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Main View</title>
+
+    <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
+    <link
+      href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS files -->
+    <link rel="stylesheet" href="./style/global.css" />
+    <link rel="stylesheet" href="./style/index_css.css" />
+
+    <!-- Fontello -->
+    <link rel="stylesheet" href="./style/fontello.css" />
+  </head>
+  <body>
+    <main>
+      <!--<h1>Welcome to My Website</h1>
+      <i class="demo-icon icon-location">&#xe800;</i>-->
+      <div id="map-box">
+        <div id="map" style="width: 100%; height: 60vh; margin: auto"></div>
+        <div id="menu">
+          <input
+            id="basic"
+            type="radio"
+            name="rtoggle"
+            value="basic"
+            checked="checked"
+          />
+          <label for="basic">Basic</label>
+          <input id="light" type="radio" name="rtoggle" value="light" />
+          <label for="light">Light</label>
+          <input id="satellite" type="radio" name="rtoggle" value="satellite" />
+          <label for="satellite">Satellite</label>
+          <input id="streets" type="radio" name="rtoggle" value="streets" />
+          <label for="streets">Streets</label>
+        </div>
+      </div>
+      <div id="tools">
+        <input type="text" id="travelName" name="travelName" size="10" />
+        <button type="button" onclick="newTravels()" class="main-color">
+          Nowa wycieczka
+        </button>
+      </div>
+      <div id="travels">
+        <p>Brak zapisanych wycieczek!</p>
+      </div>
+    </main>
+    <footer>
+      <div class="hCenter">
+        Source of maps:
+        <a href="https://www.maptiler.com/copyright/" target="_blank"
+          >&copy; MapTiler</a
+        >
+        <a href="https://www.openstreetmap.org/copyright" target="_blank"
+          >&copy; OpenStreetMap contributors</a
+        >
+      </div>
+    </footer>
+  </body>
+
+  <!-- MAP -->
+  <script>
+    var map = new maplibregl.Map({
+      container: "map",
+      style:
+        "https://api.maptiler.com/maps/basic-v2/style.json?key=tZizhVzAvNEvvZl3464r",
+      center: [17.04, 52.3],
+      zoom: 5, // starting zoom
+    });
+
+    // Add geolocate control to the map.
+    map.addControl(
+      new maplibregl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+      })
+    );
+
+    map.on("click", function (e) {
+      if (canMark) {
+        console.log(e.lngLat["lat"]);
+        var marker = new maplibregl.Marker()
+          .setLngLat([e.lngLat["lng"], e.lngLat["lat"]])
+          .addTo(map);
+      }
+    });
+
+    let layerList = document.getElementById("menu");
+    let inputs = layerList.getElementsByTagName("input");
+
+    for (let input of inputs) {
+      input.onclick = (layer) => {
+        let layerId = layer.target.id;
+
+        if (layerId == "basic") {
+          console.log(layerId);
+          map.setStyle(
+            "https://api.maptiler.com/maps/basic-v2/style.json?key=tZizhVzAvNEvvZl3464r"
+          );
+        }
+        if (layerId == "light") {
+          console.log(layerId);
+          map.setStyle(
+            "https://api.maptiler.com/maps/bright-v2/style.json?key=tZizhVzAvNEvvZl3464r"
+          );
+        }
+        if (layerId == "satellite") {
+          console.log(layerId);
+          map.setStyle(
+            "https://api.maptiler.com/maps/hybrid/style.json?key=tZizhVzAvNEvvZl3464r"
+          );
+        }
+        if (layerId == "streets") {
+          console.log(layerId);
+          map.setStyle(
+            "https://api.maptiler.com/maps/streets-v2/style.json?key=tZizhVzAvNEvvZl3464r"
+          );
+        }
+      };
+    }
+  </script>
+
+  <!-- geolocation -->
+  <script>
+    function findMe() {
+      navigator.geolocation.getCurrentPosition((position) => {
+        let lat = position.coords.latitude;
+        let long = position.coords.longitude;
+
+        console.log(lat.toFixed(2));
+        console.log(long.toFixed(2));
+
+        map.latitude = lat.toFixed(2);
+        map.longitude = long.toFixed(2);
+      });
+    }
+  </script>
+
+  <!-- Chceck login -->
+
+  <script>
+    let url = "./login.html";
+    //window.location.href = url;
+  </script>
+
+  <!-- Markery -->
+  <script>
+    let geojson = {
+      type: "Markers",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            message: "Foo",
+            iconSize: [30, 30],
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [21, 52.15],
+          },
+        },
+      ],
+    };
+    let obj = JSON.stringify(geojson);
+  </script>
+
+  <script>
+    // add markers to map
+    geojson.features.forEach(function (marker) {
+      // create a DOM element for the marker
+      var el = document.createElement("div");
+      el.className = "marker";
+      el.style.backgroundImage = "url(./files/unsplash1.jpg";
+      el.style.backgroundSize = "cover";
+      el.style.width = marker.properties.iconSize[0] + "px";
+      el.style.height = marker.properties.iconSize[1] + "px";
+
+      console.log(marker.geometry.coordinates[0]);
+      el.addEventListener("click", function () {
+        window.alert(marker.properties.message);
+      });
+
+      console.log(el);
+    });
+  </script>
+
+  <!-- tools -->
+  <script>
+    var createMarker = false;
+    function setCursorToMarker() {
+      document.body.classList.add("marker");
+
+      createMarker = true;
+    }
+
+    function setCursorToNormal() {
+      document.body.classList.remove("marker");
+    }
+  </script>
+
+  <!-- Travles-->
+
+  <script>
+    // name/id,
+    var travel = [];
+    var travels = [];
+
+    let canEdit = true;
+    let isEdit = true;
+
+    let odd = false;
+
+    let canMark = false;
+
+    function renderTravels() {
+      root = document.getElementById("travels");
+      root.replaceChildren();
+
+      travels.forEach((travel) => {
+        console.log(travel);
+
+        let travelDiv = document.createElement("div");
+        if (odd == false) {
+          travelDiv.setAttribute("id", travel[0]);
+          travelDiv.classList.add("odd");
+          odd = true;
+        } else {
+          travelDiv.setAttribute("id", travel[0]);
+          odd = false;
+        }
+
+        let travelName = document.createElement("h4");
+        travelName.setAttribute("id", travel[0] + "_title");
+        var travelNameText = document.createTextNode(travel[0]);
+        travelName.appendChild(travelNameText);
+
+        let travelDate = document.createElement("p");
+        travelDate.setAttribute("id", travel[0] + "_date");
+        var travelDateText = document.createTextNode(travel[1]);
+        travelDate.appendChild(travelDateText);
+
+        let travelDesc = document.createElement("p");
+        travelDesc.setAttribute("id", travel[0] + "_desc");
+        var travelDescText = document.createTextNode(travel[2]);
+        travelDesc.appendChild(travelDescText);
+
+        let travelMarkers = document.createElement("div");
+        travelMarkers.classList.add("flex-basis");
+
+        let btnRemove = document.createElement("button");
+        btnRemove.setAttribute("id", travel[0] + "_remove");
+        btnRemove.innerHTML = "Usuń";
+        btnRemove.classList.add("red-color");
+        btnRemove.name = travel[0] + "_remove";
+        btnRemove.onclick = function () {
+          let myname = this.name.substring(0, this.name.indexOf("_"));
+
+          let i = 0;
+          travels.forEach((travel) => {
+            if (travel[0] == myname) {
+              travels.splice(i,1);
+            }
+            i++;
+          });
+
+          renderTravels();
+        };
+
+        let btnMarker = document.createElement("button");
+        btnMarker.setAttribute("id", travel[0] + "_addMarker");
+        btnMarker.innerHTML = "Zaznacz miejsce";
+        btnMarker.classList.add("second-color");
+        btnMarker.name = travel[0] + "_addMarker";
+        btnMarker.onclick = function () {
+          if (canMark == false) {
+            this.classList.remove("second-color");
+            this.classList.add("red-color");
+            canMark = true;
+          } else {
+            this.classList.remove("red-color");
+            this.classList.add("second-color");
+            canMark = false;
+          }
+        };
+
+        travelMarkers.appendChild(btnMarker);
+
+        let travelPhotos = document.createElement("div");
+        travelPhotos.classList.add("flex-basis");
+
+        travel[3].forEach((photo) => {
+          let photoDiv = new Image();
+
+          photoDiv.src = photo;
+          travelPhotos.appendChild(photoDiv);
+        });
+
+        let uploadImge = document.createElement("input");
+        uploadImge.setAttribute("type", "file");
+        uploadImge.setAttribute("accept", "image/jpeg, image/png, image/jpg");
+        uploadImge.setAttribute("id", travel[0] + "_uploadImage");
+        uploadImge.setAttribute("name", travel[0] + "_uploadImage");
+
+        uploadImge.addEventListener("change", function () {
+          let myname = this.name.substring(0, this.name.indexOf("_"));
+
+          const file = this.files;
+
+          travels.forEach((travel) => {
+            if (travel[0] == myname) {
+              travel[3].push("./files/images/" + file[0]["name"]);
+            }
+          });
+
+          renderTravels();
+        });
+
+        let btn = document.createElement("button");
+        travelDiv.setAttribute("id", travel[0] + "_editsave");
+        btn.innerHTML = "Edytuj";
+        btn.name = travel[0] + "_editsave";
+        btn.onclick = function () {
+          if (canEdit) {
+            canEdit = false;
+          }
+          if (isEdit) {
+            this.innerHTML = "Zapisz";
+
+            let myname = this.name.substring(0, this.name.indexOf("_"));
+
+            let title = document.getElementById(myname + "_title");
+            let textTitle = title.innerHTML;
+
+            let inputTitle = document.createElement("input");
+            inputTitle.setAttribute("id", travel[0] + "_title_edit");
+            inputTitle.setAttribute("type", "text");
+            inputTitle.value = textTitle;
+
+            title.replaceWith(inputTitle);
+
+            let desc = document.getElementById(myname + "_desc");
+
+            let textDesc = desc.innerHTML;
+
+            let inputDesc = document.createElement("input");
+            inputDesc.setAttribute("id", travel[0] + "desc_edit");
+            inputDesc.setAttribute("type", "text");
+            inputDesc.value = textDesc;
+
+            desc.replaceWith(inputDesc);
+
+            let date = document.getElementById(myname + "_date");
+
+            let textDate = date.innerHTML;
+
+            let inputDate = document.createElement("input");
+            inputDate.setAttribute("id", travel[0] + "_date_edit");
+            inputDate.setAttribute("type", "date");
+
+            inputDate.value = textDate;
+
+            date.replaceWith(inputDate);
+
+            isEdit = false;
+          } else {
+            this.innerHTML = "Edytuj";
+
+            let myname = this.name.substring(0, this.name.indexOf("_"));
+
+            let title = document.getElementById(myname + "_title_edit");
+            let textTitle = title.value;
+
+            let inputTitle = document.createElement("h4");
+            inputTitle.innerHTML = textTitle;
+            inputTitle.setAttribute("id", travel[0] + "_title");
+
+            title.replaceWith(inputTitle);
+
+            let desc = document.getElementById(myname + "desc_edit");
+            let textDesc = desc.value;
+
+            let inputDesc = document.createElement("p");
+            inputDesc.setAttribute("id", travel[0] + "_desc");
+            inputDesc.innerHTML = textDesc;
+
+            desc.replaceWith(inputDesc);
+
+            let date = document.getElementById(myname + "_date_edit");
+            let textDate = date.value;
+
+            let inputDate = document.createElement("p");
+            inputDate.setAttribute("id", travel[0] + "_date");
+            inputDate.innerHTML = textDate;
+
+            date.replaceWith(inputDate);
+
+            isEdit = true;
+            canEdit = true;
+          }
+        };
+
+        btn.classList.add("main-color");
+
+        travelDiv.appendChild(travelName);
+        travelDiv.appendChild(travelDesc);
+        travelDiv.appendChild(travelDate);
+        travelDiv.appendChild(btn);
+        travelDiv.append(btnRemove);
+        travelDiv.appendChild(travelMarkers);
+        travelDiv.appendChild(travelPhotos);
+        travelDiv.appendChild(uploadImge);
+
+        root.appendChild(travelDiv);
+      });
+    }
+    function newTravels() {
+      var photos = [];
+      //photos.push("./files/images/unsplash1.jpg");
+      //photos.push("./files/images/unsplash2.jpg");
+      //photos.push("./files/images/unsplash3.jpg");
+
+      travel.push(document.getElementById("travelName").value);
+      console.log(document.getElementById("travelName").value);
+      travel.push("2023-03-11");
+      travel.push("Opis twojej podróży");
+      travel.push(photos);
+
+      travels.push(travel);
+      travel = [];
+
+      renderTravels();
+    }
+  </script>
+</html>

@@ -1,0 +1,78 @@
+*,
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  background-color: #f9fbfa;
+  color: #303645;
+}
+
+.main-color {
+  background-color: #6cc165;
+  color: #f9fbfa;
+}
+
+.second-color {
+  background-color: #007acc;
+  color: #f9fbfa;
+}
+
+.red-color {
+  background-color: tomato;
+  color: #f9fbfa;
+}
+.marker {
+  cursor: crosshair !important;
+}
+
+button {
+  border: none;
+  color: auto;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 6px;
+  width: 160px;
+  height: 30px;
+}
+
+input {
+  padding: 2px 16px;
+  height: 22px;
+  margin-top: 5px;
+}
+
+input[type="radio"] {
+  accent-color: #6cc165;
+}
+
+footer {
+  background-color: #303645;
+  color: #f9fbfa;
+
+  width: 100vw;
+  height: 10vh;
+
+  display: flex;
+  justify-content: center;
+}
+
+a {
+  color: #6cc165;
+  text-decoration: none;
+}
+
+.hCenter {
+  display: flex;
+  align-items: center;
+}
+
+p {
+  text-align: center;
+}

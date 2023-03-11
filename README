@@ -1,0 +1,26 @@
+# Kacper Paczos
+
+Testowanie funkcji "uploadu" zdjęc. Zdjęcia nalezy brac tylko z podkatalogu ./files/images
+https://stackoverflow.com/questions/15201071/how-to-get-full-path-of-selected-file-on-change-of-input-type-file-using-jav
+
+Funkcje mapy:
+
+Pokaząc punkty
+ustawić punty
+zmiana warstw
+zoomowanie
+
+
+#TODO
+rysowac ściezki między punktami.
+usuwanie zdjec
+Lepsza galeria
+Powiazanie zdjec z punkatmi
+
+Potem wycieszka ma informacje i zdjecia
+
+Jeżeli nie zalgoowany, idz do login
+JEżeli zalgoowany, do strony głównej
+
+#menu musi byc sitcky ale tylko do penwego memntu, zaagazowac z-index
+
